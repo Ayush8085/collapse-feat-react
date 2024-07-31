@@ -1,34 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react"
+import { FaFolderClosed } from "react-icons/fa6";
+import { FaFile } from "react-icons/fa";
 
+type Folder = {
+  name: string,
+  folders?: Folder[]
+}
+
+const folders: Folder[] = [
+  {
+    name: 'Home',
+    folders: [
+      {
+        name: 'Movies',
+        folders: [{
+          name: 'Action',
+          folders: [{ name: '2000s', folders: [] }, { name: '2010s', folders: [] }, { name: 'Gladiator.mp4' }]
+        }, {
+          name: 'Comedy',
+          folders: [{ name: 'Popular', folders: [] }]
+        }]
+      },
+      {
+        name: 'Music',
+        folders: [{ name: 'Party', folders: [] }, { name: 'Romantic', folders: [] }]
+      },
+      { name: 'Pictures', folders: [] },
+      { name: 'Documents', folders: [] },
+      { name: 'password.txt' },
+    ]
+  },
+]
+
+// ---------- MAIN APP --------
 function App() {
-  const [count, setCount] = useState(0)
+  return (
+    <div className="w-screen h-screen m-20">
+      <ul>
+        {folders.map((folder) => (
+          <Folder folder={folder} key={folder.name} />
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+// ----------- FOLDER COMPONENT ---------------
+function Folder({ folder }: { folder: Folder }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    // ------------ RECURSION CALL ON FOLDERS ------------
+    <li className="my-1.5" key={folder.name}>
+      <span className="flex items-center gap-1.5">
+        {folder.folders && folder.folders.length > 0 && (
+          <button onClick={() => setIsOpen(!isOpen)}>
+            <img src="/chevoran.svg" alt="" className={`w-4 ${isOpen ? 'rotate-90' : ''}`} />
+          </button>
+        )}
+        {folder.folders ? (
+          <FaFolderClosed className={`w-6 text-sky-700 ${folder.folders.length === 0 ? 'ml-5' : ''}`}/>
+        ) : (
+          <FaFile className="w-6 ml-5"/>
+        )}
+        {folder.name}
+      </span>
+
+      {isOpen && (
+        <ul className="pl-6">
+          {folder.folders?.map((folder) => (
+            <Folder folder={folder} key={folder.name} />
+          ))}
+        </ul>
+      )}
+    </li>
   )
 }
 
