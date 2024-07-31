@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { FaFolderClosed } from "react-icons/fa6";
-import { FaFile } from "react-icons/fa";
+import { FaFile, FaChevronRight } from "react-icons/fa";
 
 type Folder = {
   name: string,
@@ -55,13 +55,13 @@ function Folder({ folder }: { folder: Folder }) {
       <span className="flex items-center gap-1.5">
         {folder.folders && folder.folders.length > 0 && (
           <button onClick={() => setIsOpen(!isOpen)}>
-            <img src="/chevoran.svg" alt="" className={`w-4 ${isOpen ? 'rotate-90' : ''}`} />
+            <FaChevronRight className={`w-3 ${isOpen ? 'rotate-90' : ''}`} />
           </button>
         )}
         {folder.folders ? (
-          <FaFolderClosed className={`w-6 text-sky-700 ${folder.folders.length === 0 ? 'ml-5' : ''}`}/>
+          <FaFolderClosed className={`w-6 text-sky-700 ${folder.folders.length === 0 ? 'ml-5' : ''}`} />
         ) : (
-          <FaFile className="w-6 ml-5"/>
+          <FaFile className="w-6 ml-5" />
         )}
         {folder.name}
       </span>
